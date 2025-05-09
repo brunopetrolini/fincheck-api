@@ -16,5 +16,69 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  categories   Category[]
+  bankAccounts BankAccount[]
+  transactions Transaction[]
+
   @@map("users")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  name      String
+  icon      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id])
+  Transaction Transaction[]
+
+  @@map("categories")
+}
+
+enum BankAccountType {
+  CHECKING
+  INVESTMENT
+  CASH
+}
+
+model BankAccount {
+  id             String          @id @default(cuid())
+  userId         String          @map("user_id")
+  name           String
+  initialBalance Decimal         @map("initial_balance") @db.Decimal(10, 2)
+  type           BankAccountType
+  color          String
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id])
+  Transaction Transaction[]
+
+  @@map("bank_accounts")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String          @map("user_id")
+  bankAccountId   String          @map("bank_account_id")
+  categoryId      String?         @map("category_id")
+  description     String
+  amount          Decimal         @db.Decimal(10, 2)
+  transactionDate DateTime        @map("transaction_date")
+  type            TransactionType
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  user        User        @relation(fields: [userId], references: [id])
+  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
+
+  @@map("transactions")
 }
