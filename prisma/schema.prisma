@@ -31,8 +31,8 @@ model Category {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user        User          @relation(fields: [userId], references: [id])
-  Transaction Transaction[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
 
   @@map("categories")
 }
@@ -53,8 +53,8 @@ model BankAccount {
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
 
-  user        User          @relation(fields: [userId], references: [id])
-  Transaction Transaction[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
 
   @@map("bank_accounts")
 }
@@ -76,8 +76,8 @@ model Transaction {
   createdAt       DateTime        @default(now()) @map("created_at")
   updatedAt       DateTime        @updatedAt @map("updated_at")
 
-  user        User        @relation(fields: [userId], references: [id])
-  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id], onDelete: Cascade)
   category    Category?   @relation(fields: [categoryId], references: [id])
 
   @@map("transactions")
