@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: fincheck
+    ports:
+      - '5432:5432'
