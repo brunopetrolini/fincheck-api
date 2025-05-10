@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { hash } from 'bcryptjs';
 
-import { UsersRepository } from '@/shared/database/prisma/repositories/users.repository';
+import { UsersRepository } from '@/shared/database/prisma/repositories';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -10,6 +11,10 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const { name, email, password } = createUserDto;
-    return await this.usersRepository.save({ name, email, password });
+
+    const saltRounds = 12;
+    const hashedPassword = await hash(password, saltRounds);
+
+    return this.usersRepository.save({ name, email, password: hashedPassword });
   }
 }
