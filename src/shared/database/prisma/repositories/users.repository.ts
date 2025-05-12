@@ -8,9 +8,31 @@ export class UsersRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async save(user: Prisma.UserCreateInput) {
+    const defaultCategories = [
+      { name: 'Salário', icon: 'travel' },
+      { name: 'Freelance', icon: 'freelance' },
+      { name: 'Outro', icon: 'other' },
+      { name: 'Casa', icon: 'home' },
+      { name: 'Alimentação', icon: 'food' },
+      { name: 'Educação', icon: 'education' },
+      { name: 'Lazer', icon: 'fun' },
+      { name: 'Mercado', icon: 'grocery' },
+      { name: 'Roupas', icon: 'clothes' },
+      { name: 'Transporte', icon: 'transport' },
+      { name: 'Vigem', icon: 'travel' },
+    ];
+
     try {
       return await this.prismaService.user.create({
-        data: user,
+        data: {
+          ...user,
+          categories: {
+            createMany: {
+              data: defaultCategories,
+              skipDuplicates: true,
+            },
+          },
+        },
         select: {
           id: true,
           name: true,
