@@ -9,7 +9,6 @@ import { AuthService } from './auth.service';
   imports: [
     JwtModule.registerAsync({
       useFactory: (ConfigService: ConfigService) => ({
-        global: true,
         secret: ConfigService.get<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: '1h',
@@ -20,5 +19,6 @@ import { AuthService } from './auth.service';
   ],
   controllers: [AuthController],
   providers: [AuthService],
+  exports: [JwtModule],
 })
 export class AuthModule {}
