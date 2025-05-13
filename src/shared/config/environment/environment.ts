@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class EnvValidation {
+export class Environment {
   @IsString()
   DATABASE_URL: string;
 
