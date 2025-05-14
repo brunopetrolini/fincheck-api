@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, type Provider } from '@nestjs/common';
 
 import { BankAccountsController } from './bank-accounts.controller';
-import { BankAccountsService } from './bank-accounts.service';
+import { BankAccountOwnershipService, BankAccountsService } from './services';
+
+const exportedProviders: Provider[] = [BankAccountOwnershipService];
 
 @Module({
   controllers: [BankAccountsController],
-  providers: [BankAccountsService],
+  providers: [BankAccountsService, ...exportedProviders],
+  exports: exportedProviders,
 })
 export class BankAccountsModule {}

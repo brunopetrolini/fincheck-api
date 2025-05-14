@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put }
 
 import { ActiveUserId } from '@/shared/decorators';
 
-import { BankAccountsService } from './bank-accounts.service';
 import { BankAccountDto } from './dto';
+import { BankAccountsService } from './services/bank-accounts.service';
 
 @Controller('bank-accounts')
 export class BankAccountsController {

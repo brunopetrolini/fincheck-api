@@ -1,12 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { BankAccountsRepository } from '@/shared/database/prisma/repositories';
 
-import { BankAccountDto } from './dto/bank-account.dto';
+import { BankAccountDto } from '../dto/bank-account.dto';
+import { BankAccountOwnershipService } from './bank-account-ownership.service';
 
 @Injectable()
 export class BankAccountsService {
-  constructor(private readonly bankAccountsRepository: BankAccountsRepository) {}
+  constructor(
+    private readonly bankAccountsRepository: BankAccountsRepository,
+    private readonly bankAccountOwnershipService: BankAccountOwnershipService,
+  ) {}
 
   create(userId: string, bankAccountDto: BankAccountDto) {
     const { name, initialBalance, type, color } = bankAccountDto;
@@ -30,7 +34,7 @@ export class BankAccountsService {
   async update(userId: string, bankAccountId: string, bankAccountDto: BankAccountDto) {
     const { name, initialBalance, type, color } = bankAccountDto;
 
-    await this.validateBankAccountOwnership(userId, bankAccountId);
+    await this.bankAccountOwnershipService.validate(userId, bankAccountId);
 
     return this.bankAccountsRepository.update(bankAccountId, {
       name,
@@ -41,12 +45,7 @@ export class BankAccountsService {
   }
 
   async remove(userId: string, bankAccountId: string) {
-    await this.validateBankAccountOwnership(userId, bankAccountId);
+    await this.bankAccountOwnershipService.validate(userId, bankAccountId);
     await this.bankAccountsRepository.delete(bankAccountId);
-  }
-
-  private async validateBankAccountOwnership(userId: string, bankAccountId: string) {
-    const existingBankAccount = await this.bankAccountsRepository.findUnique(bankAccountId);
-    if (existingBankAccount?.user.id !== userId) throw new NotFoundException('Bank account not found.');
   }
 }
