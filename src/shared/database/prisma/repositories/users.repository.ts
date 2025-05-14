@@ -53,7 +53,7 @@ export class UsersRepository {
   }
 
   async findByEmail(email: string) {
-    return await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { email },
       select: {
         id: true,
@@ -64,10 +64,14 @@ export class UsersRepository {
         updatedAt: false,
       },
     });
+
+    if (!user) return null;
+
+    return user;
   }
 
   async findById(id: string) {
-    return await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { id },
       select: {
         id: false,
@@ -78,5 +82,9 @@ export class UsersRepository {
         updatedAt: false,
       },
     });
+
+    if (!user) return null;
+
+    return user;
   }
 }
