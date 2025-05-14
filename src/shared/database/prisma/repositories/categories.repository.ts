@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from 'generated/prisma';
 
 import { PrismaService } from '../prisma.service';
 
@@ -6,11 +7,9 @@ import { PrismaService } from '../prisma.service';
 export class CategoriesRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findManyByUserId(id: string) {
+  async findMany(args: Prisma.CategoryFindManyArgs['where']) {
     return await this.prismaService.category.findMany({
-      where: {
-        userId: id,
-      },
+      where: args,
       select: {
         id: true,
         name: true,

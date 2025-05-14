@@ -8,10 +8,9 @@ import { BankAccountDto } from './dto/bank-account.dto';
 export class BankAccountsService {
   constructor(private readonly bankAccountsRepository: BankAccountsRepository) {}
 
-  async create(userId: string, bankAccountDto: BankAccountDto) {
+  create(userId: string, bankAccountDto: BankAccountDto) {
     const { name, initialBalance, type, color } = bankAccountDto;
-
-    const createdBankAccount = await this.bankAccountsRepository.save({
+    return this.bankAccountsRepository.save({
       name,
       initialBalance,
       type,
@@ -22,19 +21,10 @@ export class BankAccountsService {
         },
       },
     });
-
-    return {
-      ...createdBankAccount,
-      initialBalance: Number(createdBankAccount.initialBalance),
-    };
   }
 
-  findAll() {
-    return `This action returns all bankAccounts`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} bankAccount`;
+  findAllByUserId(userId: string) {
+    return this.bankAccountsRepository.findMany({ userId });
   }
 
   update(id: number, bankAccountDto: BankAccountDto) {
