@@ -45,7 +45,14 @@ export class BankAccountsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bankAccount`;
+  async remove(userId: string, bankAccountId: string) {
+    const existingBankAccount = await this.bankAccountsRepository.findUnique(bankAccountId);
+
+    if (!existingBankAccount) throw new NotFoundException('Bank account not found.');
+    if (existingBankAccount.user.id !== userId) {
+      throw new ForbiddenException("You don't have permission to delete this bank account.");
+    }
+
+    await this.bankAccountsRepository.delete(bankAccountId);
   }
 }

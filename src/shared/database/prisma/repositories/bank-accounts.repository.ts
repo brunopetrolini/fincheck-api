@@ -97,4 +97,19 @@ export class BankAccountsRepository {
       initialBalance: Number(updatedBankAccount.initialBalance),
     };
   }
+
+  async delete(id: string) {
+    await this.prismaService.bankAccount.delete({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        initialBalance: true,
+        type: true,
+        color: true,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+  }
 }

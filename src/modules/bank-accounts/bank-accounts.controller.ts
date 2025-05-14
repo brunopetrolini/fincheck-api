@@ -25,7 +25,7 @@ export class BankAccountsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bankAccountsService.remove(+id);
+  remove(@ActiveUserId() userId: string, @Param('id') bankAccountId: string) {
+    return this.bankAccountsService.remove(userId, bankAccountId);
   }
 }
