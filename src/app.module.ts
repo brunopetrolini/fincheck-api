@@ -7,6 +7,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { UsersModule } from './modules/users';
 import { validateEnv } from './shared/config/environment';
 import { DatabaseModule } from './shared/database';
+import { BankAccountsModule } from './modules/bank-accounts/bank-accounts.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DatabaseModule } from './shared/database';
     AuthModule,
     UsersModule,
     CategoriesModule,
+    BankAccountsModule,
   ],
   providers: [
     {
