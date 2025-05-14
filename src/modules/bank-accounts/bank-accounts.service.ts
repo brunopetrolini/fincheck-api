@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { BankAccountsRepository } from '@/shared/database/prisma/repositories';
 
@@ -45,10 +45,7 @@ export class BankAccountsService {
   async remove(userId: string, bankAccountId: string) {
     const existingBankAccount = await this.bankAccountsRepository.findUnique(bankAccountId);
 
-    if (!existingBankAccount) throw new NotFoundException('Bank account not found.');
-    if (existingBankAccount.user.id !== userId) {
-      throw new ForbiddenException("You don't have permission to delete this bank account.");
-    }
+    if (existingBankAccount?.user.id !== userId) throw new NotFoundException('Bank account not found.');
 
     await this.bankAccountsRepository.delete(bankAccountId);
   }
