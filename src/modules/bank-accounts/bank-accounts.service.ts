@@ -32,10 +32,7 @@ export class BankAccountsService {
 
     const existingBankAccount = await this.bankAccountsRepository.findUnique(bankAccountId);
 
-    if (!existingBankAccount) throw new NotFoundException('Bank account not found.');
-    if (existingBankAccount.user.id !== userId) {
-      throw new ForbiddenException("You don't have permission to update this bank account.");
-    }
+    if (existingBankAccount?.user.id !== userId) throw new NotFoundException('Bank account not found.');
 
     return this.bankAccountsRepository.update(bankAccountId, {
       name,
