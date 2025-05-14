@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { BankAccountsRepository } from '@/shared/database/prisma/repositories';
 
@@ -27,8 +27,22 @@ export class BankAccountsService {
     return this.bankAccountsRepository.findMany({ userId });
   }
 
-  update(id: number, bankAccountDto: BankAccountDto) {
-    return `This action updates a #${id} bankAccount`;
+  async update(userId: string, bankAccountId: string, bankAccountDto: BankAccountDto) {
+    const { name, initialBalance, type, color } = bankAccountDto;
+
+    const existingBankAccount = await this.bankAccountsRepository.findUnique(bankAccountId);
+
+    if (!existingBankAccount) throw new NotFoundException('Bank account not found.');
+    if (existingBankAccount.user.id !== userId) {
+      throw new ForbiddenException("You don't have permission to update this bank account.");
+    }
+
+    return this.bankAccountsRepository.update(bankAccountId, {
+      name,
+      initialBalance,
+      type,
+      color,
+    });
   }
 
   remove(id: number) {

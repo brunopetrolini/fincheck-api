@@ -20,8 +20,8 @@ export class BankAccountsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() bankAccountDto: BankAccountDto) {
-    return this.bankAccountsService.update(+id, bankAccountDto);
+  update(@ActiveUserId() userId: string, @Param('id') bankAccountId: string, @Body() bankAccountDto: BankAccountDto) {
+    return this.bankAccountsService.update(userId, bankAccountId, bankAccountDto);
   }
 
   @Delete(':id')

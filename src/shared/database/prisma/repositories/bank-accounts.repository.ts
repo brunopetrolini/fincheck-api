@@ -41,9 +41,60 @@ export class BankAccountsRepository {
       },
     });
 
+    if (!bankAccounts) return [];
+
     return bankAccounts.map((bankAccount) => ({
       ...bankAccount,
       initialBalance: Number(bankAccount.initialBalance),
     }));
+  }
+
+  async findUnique(id: string) {
+    const bankAccount = await this.prismaService.bankAccount.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        initialBalance: true,
+        type: true,
+        color: true,
+        createdAt: false,
+        updatedAt: false,
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!bankAccount) return null;
+
+    return {
+      ...bankAccount,
+      initialBalance: Number(bankAccount.initialBalance),
+    };
+  }
+
+  async update(id: string, bankAccount: Prisma.BankAccountUpdateInput) {
+    const updatedBankAccount = await this.prismaService.bankAccount.update({
+      where: { id },
+      data: bankAccount,
+      select: {
+        id: true,
+        name: true,
+        initialBalance: true,
+        type: true,
+        color: true,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+
+    return {
+      ...updatedBankAccount,
+      initialBalance: Number(updatedBankAccount.initialBalance),
+    };
   }
 }
