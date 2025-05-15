@@ -8,6 +8,6 @@ export class BankAccountOwnershipService {
 
   async validate(userId: string, bankAccountId: string) {
     const existingBankAccount = await this.bankAccountsRepository.findUnique(bankAccountId);
-    if (existingBankAccount?.user.id !== userId) throw new NotFoundException('Bank account not found.');
+    if (existingBankAccount?.userId !== userId) throw new NotFoundException('Bank account not found.');
   }
 }

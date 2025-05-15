@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 
 import { ActiveUserId } from '@/shared/decorators';
 
-import { CategoriesService } from './categories.service';
+import { CategoriesService } from './services';
 
 @Controller('categories')
 export class CategoriesController {

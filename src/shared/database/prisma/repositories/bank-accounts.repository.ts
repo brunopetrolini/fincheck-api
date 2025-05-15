@@ -58,12 +58,7 @@ export class BankAccountsRepository {
         color: true,
         createdAt: false,
         updatedAt: false,
-        user: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        userId: true,
       },
     });
 

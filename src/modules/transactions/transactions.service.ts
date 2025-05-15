@@ -2,16 +2,26 @@ import { Injectable } from '@nestjs/common';
 
 import { TransactionsRepository } from '@/shared/database/prisma/repositories';
 
+import { BankAccountOwnershipService } from '../bank-accounts/services';
+import { CategoryOwnershipService } from '../categories/services';
 import { TransactionDto } from './dto/transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
-  constructor(private readonly transactionsRepository: TransactionsRepository) {}
+  constructor(
+    private readonly transactionsRepository: TransactionsRepository,
+    private readonly bankAccountOwnershipService: BankAccountOwnershipService,
+    private readonly categoryOwnershipService: CategoryOwnershipService,
+  ) {}
 
-  create(userId: string, transactionDto: TransactionDto) {
+  async create(userId: string, transactionDto: TransactionDto) {
     const { bankAccountId, categoryId, description, transactionDate, type, amount } = transactionDto;
-    return this.transactionsRepository.save({
+
+    await this.bankAccountOwnershipService.validate(userId, bankAccountId);
+    await this.categoryOwnershipService.validate(userId, categoryId);
+
+    return await this.transactionsRepository.save({
       description,
       transactionDate,
       type,

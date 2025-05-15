@@ -8,7 +8,7 @@ export class CategoriesRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async findMany(args: Prisma.CategoryFindManyArgs['where']) {
-    const categories = await this.prismaService.category.findMany({
+    return await this.prismaService.category.findMany({
       where: args,
       select: {
         id: true,
@@ -19,9 +19,19 @@ export class CategoriesRepository {
         updatedAt: false,
       },
     });
+  }
 
-    if (!categories) return [];
-
-    return categories;
+  async findUnique(id: string) {
+    return await this.prismaService.category.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        icon: true,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
   }
 }
