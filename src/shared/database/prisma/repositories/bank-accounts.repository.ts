@@ -41,8 +41,6 @@ export class BankAccountsRepository {
       },
     });
 
-    if (!bankAccounts) return [];
-
     return bankAccounts.map((bankAccount) => ({
       ...bankAccount,
       initialBalance: Number(bankAccount.initialBalance),

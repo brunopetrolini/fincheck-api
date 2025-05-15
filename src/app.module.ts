@@ -8,6 +8,7 @@ import { UsersModule } from './modules/users';
 import { validateEnv } from './shared/config/environment';
 import { DatabaseModule } from './shared/database';
 import { BankAccountsModule } from './modules/bank-accounts/bank-accounts.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BankAccountsModule } from './modules/bank-accounts/bank-accounts.module
     UsersModule,
     CategoriesModule,
     BankAccountsModule,
+    TransactionsModule,
   ],
   providers: [
     {
