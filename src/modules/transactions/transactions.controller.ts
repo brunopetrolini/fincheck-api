@@ -3,7 +3,6 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put }
 import { ActiveUserId } from '@/shared/decorators';
 
 import { TransactionDto } from './dto/transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
 
 @Controller('transactions')
@@ -21,8 +20,8 @@ export class TransactionsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTransactionDto: UpdateTransactionDto) {
-    return this.transactionsService.update(+id, updateTransactionDto);
+  update(@Param('id') id: string, @Body() transactionDto: TransactionDto) {
+    return this.transactionsService.update(+id, transactionDto);
   }
 
   @Delete(':id')
