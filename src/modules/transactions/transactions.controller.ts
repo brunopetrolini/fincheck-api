@@ -26,7 +26,7 @@ export class TransactionsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
+  remove(@ActiveUserId() userId: string, @Param('id') id: string) {
+    return this.transactionsService.remove(userId, id);
   }
 }

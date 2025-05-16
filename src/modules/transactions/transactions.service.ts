@@ -69,8 +69,14 @@ export class TransactionsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(userId: string, transactionId: string) {
+    await this.validateTransactionOwnership(userId, transactionId);
+    await this.transactionsRepository.delete(transactionId);
+  }
+
+  private async validateTransactionOwnership(userId: string, transactionId: string) {
+    const transaction = await this.transactionsRepository.findUnique({ id: transactionId });
+    if (!transaction || transaction.userId !== userId) throw new Error('Transaction not found');
   }
 
   private async validateEntitiesOwnership(userId: string, bankAccountId: string, categoryId: string) {

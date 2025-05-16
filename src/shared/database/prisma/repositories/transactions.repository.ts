@@ -53,6 +53,31 @@ export class TransactionsRepository {
     }));
   }
 
+  async findUnique(args: Prisma.TransactionFindUniqueArgs['where']) {
+    const transaction = await this.prismaService.transaction.findUnique({
+      where: args,
+      select: {
+        id: true,
+        categoryId: true,
+        bankAccountId: true,
+        transactionDate: true,
+        description: true,
+        amount: true,
+        type: true,
+        userId: true,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+
+    if (!transaction) return null;
+
+    return {
+      ...transaction,
+      amount: Number(transaction.amount),
+    };
+  }
+
   async update(id: string, transaction: Prisma.TransactionUpdateInput) {
     const updatedTransaction = await this.prismaService.transaction.update({
       where: { id },
@@ -74,5 +99,11 @@ export class TransactionsRepository {
       ...updatedTransaction,
       amount: Number(transaction.amount),
     };
+  }
+
+  async delete(id: string) {
+    await this.prismaService.transaction.delete({
+      where: { id },
+    });
   }
 }
