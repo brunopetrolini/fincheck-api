@@ -79,8 +79,16 @@ export class TransactionsService {
     if (!transaction || transaction.userId !== userId) throw new Error('Transaction not found');
   }
 
-  private async validateEntitiesOwnership(userId: string, bankAccountId: string, categoryId: string) {
-    await this.bankAccountOwnershipService.validate(userId, bankAccountId);
-    await this.categoryOwnershipService.validate(userId, categoryId);
+  private async validateEntitiesOwnership(
+    userId: string,
+    transactionId?: string,
+    bankAccountId?: string,
+    categoryId?: string,
+  ) {
+    await Promise.all([
+      transactionId && (await this.validateTransactionOwnership(userId, transactionId)),
+      bankAccountId && (await this.bankAccountOwnershipService.validate(userId, bankAccountId)),
+      categoryId && (await this.categoryOwnershipService.validate(userId, categoryId)),
+    ]);
   }
 }
