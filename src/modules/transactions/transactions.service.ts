@@ -5,7 +5,6 @@ import { TransactionsRepository } from '@/shared/database/prisma/repositories';
 import { BankAccountOwnershipService } from '../bank-accounts/services';
 import { CategoryOwnershipService } from '../categories/services';
 import { TransactionDto } from './dto/transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -48,7 +47,7 @@ export class TransactionsService {
     return this.transactionsRepository.findMany({ userId });
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
+  update(id: number, transactionDto: TransactionDto) {
     return `This action updates a #${id} transaction`;
   }
 

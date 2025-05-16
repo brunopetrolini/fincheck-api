@@ -1,2 +1,2 @@
-export * from './categories-ownership.service';
 export * from './categories.service';
+export * from './categories-ownership.service';
