@@ -20,8 +20,8 @@ export class TransactionsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() transactionDto: TransactionDto) {
-    return this.transactionsService.update(+id, transactionDto);
+  update(@ActiveUserId() userId: string, @Param('id') id: string, @Body() transactionDto: TransactionDto) {
+    return this.transactionsService.update(userId, id, transactionDto);
   }
 
   @Delete(':id')

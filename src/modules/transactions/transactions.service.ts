@@ -17,8 +17,7 @@ export class TransactionsService {
   async create(userId: string, transactionDto: TransactionDto) {
     const { bankAccountId, categoryId, description, transactionDate, type, amount } = transactionDto;
 
-    await this.bankAccountOwnershipService.validate(userId, bankAccountId);
-    await this.categoryOwnershipService.validate(userId, categoryId);
+    await this.validateEntitiesOwnership(userId, bankAccountId, categoryId);
 
     return await this.transactionsRepository.save({
       description,
@@ -47,11 +46,35 @@ export class TransactionsService {
     return this.transactionsRepository.findMany({ userId });
   }
 
-  update(id: number, transactionDto: TransactionDto) {
-    return `This action updates a #${id} transaction`;
+  async update(userId: string, transactionId: string, transactionDto: TransactionDto) {
+    const { bankAccountId, categoryId, description, transactionDate, type, amount } = transactionDto;
+
+    await this.validateEntitiesOwnership(userId, bankAccountId, categoryId);
+
+    return this.transactionsRepository.update(transactionId, {
+      description,
+      transactionDate,
+      type,
+      amount,
+      category: {
+        connect: {
+          id: categoryId,
+        },
+      },
+      bankAccount: {
+        connect: {
+          id: bankAccountId,
+        },
+      },
+    });
   }
 
   remove(id: number) {
     return `This action removes a #${id} transaction`;
+  }
+
+  private async validateEntitiesOwnership(userId: string, bankAccountId: string, categoryId: string) {
+    await this.bankAccountOwnershipService.validate(userId, bankAccountId);
+    await this.categoryOwnershipService.validate(userId, categoryId);
   }
 }

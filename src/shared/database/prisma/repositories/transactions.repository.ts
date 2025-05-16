@@ -7,9 +7,9 @@ import { PrismaService } from '../prisma.service';
 export class TransactionsRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async save(input: Prisma.TransactionCreateInput) {
+  async save(transaction: Prisma.TransactionCreateInput) {
     const createdTransaction = await this.prismaService.transaction.create({
-      data: input,
+      data: transaction,
       select: {
         id: true,
         categoryId: true,
@@ -51,5 +51,28 @@ export class TransactionsRepository {
       ...transaction,
       amount: Number(transaction.amount),
     }));
+  }
+
+  async update(id: string, transaction: Prisma.TransactionUpdateInput) {
+    const updatedTransaction = await this.prismaService.transaction.update({
+      where: { id },
+      data: transaction,
+      select: {
+        id: true,
+        description: true,
+        amount: true,
+        transactionDate: true,
+        type: true,
+        bankAccountId: true,
+        categoryId: true,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+
+    return {
+      ...updatedTransaction,
+      amount: Number(transaction.amount),
+    };
   }
 }
