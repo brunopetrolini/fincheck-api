@@ -5,6 +5,7 @@ import { TransactionsRepository } from '@/shared/database/prisma/repositories';
 import { BankAccountOwnershipService } from '../bank-accounts/services';
 import { CategoryOwnershipService } from '../categories/services';
 import { TransactionDto } from './dto/transaction.dto';
+import { TransactionType } from './enums';
 
 @Injectable()
 export class TransactionsService {
@@ -49,6 +50,7 @@ export class TransactionsService {
     return this.transactionsRepository.findMany({
       userId,
       bankAccountId: filters.bankAccountId,
+      type: filters.type,
       transactionDate: {
         gte: gteUTCDate,
         lt: ltUTCDate,
@@ -107,4 +109,5 @@ interface FindFilters {
   month: number;
   year: number;
   bankAccountId?: string;
+  type?: TransactionType;
 }
