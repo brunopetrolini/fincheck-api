@@ -42,8 +42,17 @@ export class TransactionsService {
     });
   }
 
-  findAllByUser(userId: string) {
-    return this.transactionsRepository.findMany({ userId });
+  findAllByUser(userId: string, filters: FindFilters) {
+    const gteUTCDate = new Date(Date.UTC(filters.year, filters.month));
+    const ltUTCDate = new Date(Date.UTC(filters.year, filters.month + 1));
+
+    return this.transactionsRepository.findMany({
+      userId,
+      transactionDate: {
+        gte: gteUTCDate,
+        lt: ltUTCDate,
+      },
+    });
   }
 
   async update(userId: string, transactionId: string, transactionDto: TransactionDto) {
@@ -91,4 +100,9 @@ export class TransactionsService {
       categoryId && (await this.categoryOwnershipService.validate(userId, categoryId)),
     ]);
   }
+}
+
+interface FindFilters {
+  month: number;
+  year: number;
 }

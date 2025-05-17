@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 
 import { ActiveUserId } from '@/shared/decorators';
 
@@ -15,8 +27,12 @@ export class TransactionsController {
   }
 
   @Get()
-  findAll(@ActiveUserId() userId: string) {
-    return this.transactionsService.findAllByUser(userId);
+  findAll(
+    @ActiveUserId() userId: string,
+    @Query('month', ParseIntPipe) month: number,
+    @Query('year', ParseIntPipe) year: number,
+  ) {
+    return this.transactionsService.findAllByUser(userId, { month, year });
   }
 
   @Put(':id')
