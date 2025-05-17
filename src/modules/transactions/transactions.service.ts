@@ -48,6 +48,7 @@ export class TransactionsService {
 
     return this.transactionsRepository.findMany({
       userId,
+      bankAccountId: filters.bankAccountId,
       transactionDate: {
         gte: gteUTCDate,
         lt: ltUTCDate,
@@ -105,4 +106,5 @@ export class TransactionsService {
 interface FindFilters {
   month: number;
   year: number;
+  bankAccountId?: string;
 }
