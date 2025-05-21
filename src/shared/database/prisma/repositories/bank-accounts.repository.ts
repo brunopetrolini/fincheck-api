@@ -27,24 +27,10 @@ export class BankAccountsRepository {
     };
   }
 
-  async findMany(args: Prisma.BankAccountFindManyArgs['where']) {
-    const bankAccounts = await this.prismaService.bankAccount.findMany({
-      where: args,
-      select: {
-        id: true,
-        name: true,
-        initialBalance: true,
-        type: true,
-        color: true,
-        createdAt: false,
-        updatedAt: false,
-      },
-    });
-
-    return bankAccounts.map((bankAccount) => ({
-      ...bankAccount,
-      initialBalance: Number(bankAccount.initialBalance),
-    }));
+  async findMany<T extends Prisma.BankAccountFindManyArgs>(
+    args: Prisma.SelectSubset<T, Prisma.BankAccountFindManyArgs>,
+  ) {
+    return await this.prismaService.bankAccount.findMany(args);
   }
 
   async findUnique(id: string) {
